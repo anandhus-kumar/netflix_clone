@@ -25,13 +25,6 @@ const Main = () => {
       });
   }, []);
 
-//   const turncateString = (str, num) => {
-//     if (str?.length > num) {
-//     return str.slice(0, num) + '......'
-//     } else {
-//       return str
-//   }
-// }
   return (
     <div className="w-full h-[550px]  text-white">
       <div className="w-full h-full ">
