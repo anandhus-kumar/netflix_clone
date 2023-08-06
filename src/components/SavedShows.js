@@ -3,7 +3,7 @@ import { MdChevronLeft, MdChevronRight } from 'react-icons/md'
 import { UserAuth } from '../context/AuthContext'
 import { onSnapshot, doc, updateDoc } from 'firebase/firestore'
 import { db } from '../firebase'
-
+import {AiOutlineClose} from 'react-icons/ai'
 const SavedShows = () => {
     const {user} = UserAuth()
     const [movies, setMovies] = useState([]); 
@@ -20,7 +20,20 @@ const SavedShows = () => {
         onSnapshot(doc(db, 'users', `${user?.email}`), (doc) => {
                 setMovies(doc.data()?.savedShows)
             })
-    },[user?.email])
+    }, [user?.email])
+    const movieRef = doc(db, 'users', `${user?.email}`)
+    const deleteShow = async (passedID) => {
+  try {
+      const result = movies.filter((items) => items.id !== passedID)
+      await updateDoc(movieRef, {
+          savedShows:result,
+      })
+  } catch (error) {
+    console.log(error)
+  }
+    }
+
+
   return (
       <>
             <h2 className='text-white font-bold md:text-xl p-4'>My Favorites </h2>
@@ -35,7 +48,7 @@ const SavedShows = () => {
                               <div className='absolute top-0 left-0 w-full h-full hover:bg-black/80 opacity-0 hover:opacity-60 text-white'>
                                   <p className='whitespace-normal text-xs flex justify-center items-center font-bold h-full text-center'> {item.title }</p>
                                  
-                     
+                                  <p onClick={()=> deleteShow(item.id) } className='absolute text-gray-300 top-4 right-4' > <AiOutlineClose/> </p>
                               </div>
                           </div>
                       )
