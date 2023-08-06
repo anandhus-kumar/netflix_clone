@@ -1,13 +1,31 @@
-import React, { useState } from 'react'
+import React, {useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { UserAuth } from '../context/AuthContext'
 import {  toast } from 'react-toastify';
+import { doc, updateDoc } from 'firebase/firestore';
+import { db } from '../firebase';
 
 const Signup = () => {
   const{user, signUp} = UserAuth()
-  const[email, setEmail] = useState("")
+  const [email, setEmail] = useState("")
+  const [username, setUsername] = useState("")
   const [password, setPassword] = useState("")
+
   const navigate = useNavigate()
+
+
+  const updateUsernameInFirestore = async (email, username) => {
+    try {
+      const userID = doc(db, 'users', email);
+      await updateDoc(userID, {
+        username: username
+      });
+    } catch (error) {
+      console.error("Error updating username in Firestore:", error);
+    }
+  };
+
+
 
   const handleSubmit = async(e) => {
     e.preventDefault()
@@ -16,14 +34,17 @@ const Signup = () => {
       toast.success('Succesfully Registered !', {
         position: toast.POSITION.TOP_CENTER
       });
-      navigate('./Login.js')
+        navigate('/')
+       await updateUsernameInFirestore(email, username);
+        
     } catch (error) {
       toast.error(error.message, {
         position: toast.POSITION.TOP_CENTER
       });
     }
   }
-  
+
+
   return (
       <>
             <div className='w-full h-screen'>
@@ -38,6 +59,8 @@ const Signup = () => {
               <form onSubmit={handleSubmit } className='w-full flex flex-col py-4'>
                 <input onChange={(e) => setEmail(e.target.value)}
                   className='w-full p-3 my-3 rounded bg-white/10   pl-3' type="email" placeholder=' Email' autoComplete='email' />
+                <input onChange={(e) => setUsername(e.target.value)}
+                  className='w-full p-3 my-3 rounded bg-white/10   pl-3' type="text" placeholder=' Username' autoComplete='username' />
                               <input onChange={(e) => setPassword(e.target.value)} className='w-full p-3 my-3 rounded bg-white/10  pl-3 ' type="password" placeholder=' Password' autoComplete='current-password'/>
                              <button className='bg-red-600 py-2 my-6 w-full'> Sign Up</button>
                           </form>

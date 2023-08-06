@@ -43,10 +43,10 @@ const Navbar = () => {
           </div>
           {user?.email? <div>
                 <ul className="font-medium inline-flex justify-between items-start  text-white    ">
-              <li className='px-1 lg:px-[120px]' >
+              <li  >
                 <Link to='/account'>
 
-                         <button type="button" className="focus:outline-none text-white font-bold rounded-[3px] border px-2 hover:bg-red-600 hover:border-red-800 text-sm  py-1  mb-2   "> Account</button>
+                         <button type="button" className="focus:outline-none text-white font-bold rounded-[3px] border px-3 hover:bg-red-600 hover:border-red-800 text-sm  py-1  mb-2   "> Account</button>
                 </Link>
                   </li>
               <li className='px-5 lg:px-[120px]' >
